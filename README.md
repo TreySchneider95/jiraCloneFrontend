@@ -42,22 +42,13 @@ This jira clone will help you create and manage tasks to streamline production o
     - Profile page (view user registered information)
     - Manage user page (View all users)
 
-## Backend Routes:
-    - (GET) /tickets/all
-        - Gets all tickets
-    - (GET) /tickets/one-ticket/:id
-        - Gets single ticket by id
-    - (GET) /users/all
-        - Gets all users for admin
-    - (POST) /tickets/create-one
-        - Creates ticket
-    - (POST) /users/login
-        - login for user
-    - (POST) /users/register
-        - registers user
-    - (PUT) /tickets/update-one/:id
-        - updates ticket by id
-    - (PUT) /users/update-one/:id
-        - updates user info by id
-    - (DELETE) /tickets/delete-one/:id
-        - deletes ticket by id
+## Packages:
+    - axios: ^1.3.4
+    - bootstrap: ^5.2.3
+    - dotenv: ^16.0.3
+    - react: ^18.2.0
+    - react-bootstrap: ^2.7.2
+    - react-dom: ^18.2.0
+    - react-router-dom: ^6.9.0
+    - react-scripts: 5.0.1
+    - web-vitals: ^2.1.4
