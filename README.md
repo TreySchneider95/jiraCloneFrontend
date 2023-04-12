@@ -1,43 +1,43 @@
-# Jira Clone Final Project
+# Jira Clone Final Project Frontend
 
 Jira Clone:
-This jira clone will help you create and manage tasks to streamline production on your next project. 
+This jira clone will help you create and manage tasks to streamline production on your next project.
 
-## Non user functionality:
+## Non-user functionality:
     - Create Profile:
-        - register as a new user
+    - register as a new user
     - Login
 
 ## User functionality:
     - Login/Logout
     - Create tickets:
-        - Add description of issue
+        - Add a description of the issue
         - Assign to a user
         - Pick a priority level
-    - Update a tickets status:
+    - Update the status of a ticket:
         - Statuses:
             - Pending (When first created)
-            - In progress (When user assigned says they are working on it)
-            - Done (When user assigned says they are done)
-    - Add update notes to tickets:
-        - User assigned can add notes to the ticket for updates or status of progress on the issue
+            - In progress (When the user assigned says they are working on it)
+            - Done (When the user assigned says they are done)
+            - Add update notes to tickets:
+            - User assigned can add notes to the ticket for updates or status of progress on the issue
     - View All tickets
     - View personal information:
         - Page that displays users registered information (email, name, phone number)
     - Edit personal information:
-        - Be able to chane registered information (email, name, phone number)
+        - Be able to change registered information (email, name, phone number)
 
 ## Admin functionality:
     - Everything a User can do
     - Delete tickets
-    - Change who ticket is assigned to
+    - Change who the ticket is assigned to
     - View all Users
 
 ## Pages:
     - Login page
     - Register page
     - Home page (where you view all tickets)
-    - Ticket page (view more details about specific ticket also where you can edit ticket and delete ticket)
+    - Ticket page (view more details about the specific ticket also where you can edit ticket and delete the ticket)
     - Ticket form page (Create new ticket)
     - Profile page (view user registered information)
     - Manage user page (View all users)

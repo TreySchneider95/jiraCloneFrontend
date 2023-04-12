@@ -10,13 +10,15 @@ export const AuthProvider = ({ children }) => {
 	const [userEmail, setUserEmail] = useState("")
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false)
+  const [userId, setUserId] = useState()
+  const [needsReload, setNeedsReload] = useState(false)
 
   //didcomponentupdate
   useEffect(() => {
 
     //get session data if session is still active from the browser
     const userData = getLSUserData();
-
+    // console.log(`This is the user data ${userData.userId}`)
     //if isAuthLoading changes, set the setUserToken and setUserEmail
 		if (userData && userData.token) {
 			setUserToken(userData.token);
@@ -24,6 +26,9 @@ export const AuthProvider = ({ children }) => {
 		if (userData && userData.email) {
 			setUserEmail(userData.email);
 		}
+    if (userData && userData.userId){
+      setUserId(userData.userId)
+    }
   }, [isAuthLoading]);
 
   // call this function when you want to register the user
@@ -44,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     }
     if (loginResult.success) {
       //update browser session details 
-      setLSUserData(loginResult.token, loginResult.email);
+      setLSUserData(loginResult.token, loginResult.email, loginResult.userId);
     }
     setIsAuthLoading(false);
     return loginResult
@@ -58,6 +63,7 @@ export const AuthProvider = ({ children }) => {
 		setUserEmail("");
     setIsAuthLoading(false);
     setIsAdmin(false)
+    setUserId()
   };
 
   /*  
@@ -69,10 +75,13 @@ export const AuthProvider = ({ children }) => {
     () => ({
         userToken,
         userEmail,
+        userId,
         isAdmin,
         login,
         logout,
-        register
+        register,
+        needsReload,
+        setNeedsReload
     }),
     [userToken, userEmail, isAdmin]
   );
@@ -102,7 +111,6 @@ const registerUser = async (email, password) => {
 };
 
 const loginUser = async (email, password) => {
-    console.log("Here I Am")
   const url = `${urlEndpoint}/users/login`;
   const response = await fetch(url, {
     method: "POST",
@@ -118,13 +126,13 @@ const loginUser = async (email, password) => {
   return responseJSON;
 };
 
-const setLSUserData = (token, email) => {
+const setLSUserData = (token, email, userId) => {
 
   // caching our token session/ email 
   // in the browser window
   localStorage.setItem(
     process.env.REACT_APP_TOKEN_HEADER_KEY,
-    JSON.stringify({token, email})
+    JSON.stringify({token, email, userId})
   );
 };
 
