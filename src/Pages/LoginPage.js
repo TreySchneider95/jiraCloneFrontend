@@ -48,7 +48,7 @@ const LoginPage = (props) => {
                             e.preventDefault()
                             const loginResult = await auth.login(email, password);
                             if (loginResult.success) {
-                                navigate("/")
+                                navigate("/#loaded")
                             }
                             if (!loginResult.success) {
                                 setLoginMessage(loginResult.message)

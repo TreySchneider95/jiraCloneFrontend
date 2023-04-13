@@ -11,11 +11,15 @@ const HomePage = (props)=>{
     const [tickets, setTickets] = useState(ticketList)
 
     const filterList = (filter)=>{
-        const newTickets = ticketList.filter((ticket)=>{
-            return ticket.status === filter
-        })
-        console.log(newTickets)
-        setTickets(newTickets)
+        if (filter === "All"){
+            setTickets(ticketList)
+        }else{
+            const newTickets = ticketList.filter((ticket)=>{
+                return ticket.status === filter
+            })
+            setTickets(newTickets)
+            console.log(newTickets)
+        }
     }
 
     useEffect(()=>{
@@ -23,7 +27,8 @@ const HomePage = (props)=>{
             window.location = window.location + '#loaded';
             window.location.reload();
         }
-    }, [])
+        setTickets(ticketList)
+    }, [ticketList])
 
 
     return (
@@ -36,12 +41,16 @@ const HomePage = (props)=>{
                     filterList(e.target.value)
                 }}
             >
+                <option value="All">All</option>
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Done">Done</option>
             </select>
             </div>
             <div className="row m-4">
+                {/* {console.log(tickets.map((item, index)=>{
+                    return item.title
+                }))} */}
                 {tickets.map((item, index) => {
                     return (<TicketCard 
                         ticket={item} 

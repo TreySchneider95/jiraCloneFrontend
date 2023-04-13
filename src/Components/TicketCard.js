@@ -5,14 +5,13 @@ import axios from "axios";
 const TicketCard = (props)=>{
 
     const { ticket, urlEndPoint } = props;
-    const [title, setTitle] = useState(ticket.title)
+    const [title, setTitle] = useState()
     const [description, setDescription] = useState(ticket.description)
     const [assignedToUserId, setassignedToUserId] = useState(ticket.assignedToUserId)
     const [status, setStatus] = useState(ticket.status)
     const [createdById, setCreatedById] = useState(ticket.createdById)
     const [createdUser, setCreatedUser] = useState()
     const [assignedUser, setAssignedUser] = useState()
-
 
     useEffect(() => {
         axios.get(`${urlEndPoint}/users/one/${createdById}`)
@@ -30,7 +29,12 @@ const TicketCard = (props)=>{
         .catch(function (error) {
           console.log(error);
         });
-      },[])
+
+        setTitle(ticket.title)
+        setDescription(ticket.description)
+        setStatus(ticket.status)
+
+      },[ticket])
 
     return (
         <div className="col-md-4">
