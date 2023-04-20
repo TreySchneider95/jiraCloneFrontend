@@ -40,7 +40,7 @@ const TicketCard = (props)=>{
         <div className="col-md-4">
             <div className="card my-2">
                 <div className="card-body">
-                    <h5 className="card-title"><Link to={``} >{title}</Link></h5>
+                    <h5 className="card-title"><Link to={`/ticket/${ticket._id}`} >{title}</Link></h5>
                     <h6 className="card-subtitle mb-2 text-muted">Created By: {createdUser}</h6>
                     <h6 className="card-subtitle mb-2 text-muted">Assigned To: {assignedUser}</h6>
                     <p className="card-text text-truncate">{description}</p>

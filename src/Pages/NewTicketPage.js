@@ -85,7 +85,6 @@ const NewTicketPage = (props) =>{
                             required
                             className="form-select"
                             onChange={(e)=>{
-                                console.log("here")
                                 setAssignedToUserId(e.target.value)
                             }}    
                         >
@@ -105,9 +104,7 @@ const NewTicketPage = (props) =>{
                             required
                             className="form-select"
                             onChange={(e)=>{
-                                console.log("look Here")
                                 setStatus(e.target.value)
-                                console.log(status)
                             }}    
                         >
                             <option value="Pending">Pending</option>

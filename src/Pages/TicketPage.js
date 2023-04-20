@@ -5,40 +5,79 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../Hooks/Auth';
 
 
-const BlogPage = (props)=>{
+const TicketPage = (props)=>{
     const auth = useAuth()
-    const { id } = useParams();
     const { urlEndPoint } = props
-    const [blog, setBlog] = useState({});
-    const [blogTitle, setBlogTitle] = useState(blog.title)
-    const [text, setText] = useState(blog.text)
-    const [author, setAuthor] = useState(blog.author)
-    const [categories, setCategories] = useState(blog.categories)
+    const { id } = useParams();
+    const [ticket, setTicket] = useState({});
+    const [ticketTitle, setTicketTitle] = useState(ticket.title)
+    const [description, setDescription] = useState(ticket.description)
+    const [createdById, setCreatedById] = useState(ticket.createdById)
+    const [status, setStatus] = useState(ticket.status)
+    const [createdAt, setCreatedAt] = useState(ticket.createdAt)
+    const [assignedToUserId, setAssignedToUserId] = useState(ticket.assignedToUserId)
+    const [createdUser, setCreatedUser] = useState()
+    const [assignedUser, setAssignedUser] = useState()
+    const [users, setUsers] = useState([])
+    // const [author, setAuthor] = useState(blog.author)
+    // const [categories, setCategories] = useState(blog.categories)
     const [isEditing, setIsEditing] = useState(false);
 
-    console.log(blog.categories)
 
     useEffect(() => {
-        axios
-        .get(urlEndPoint + '/blogs/single/' + id)
-        .then(res => {
-          console.log(res.data);
-          setBlog(res.data.blog[0])
-        })
-        .catch(err => {
-          console.log("Error:" + err);
-        })
-  
-      },[urlEndPoint, id])
+            axios
+            .get(urlEndPoint + '/tickets/single/' + id)
+            .then(res => {
+              setTicket(res.data.ticket)
+              setAssignedToUserId(res.data.ticket.assignedToUserId)
+            })
+            .catch(err => {
+              console.log("Error:" + err);
+            });
 
-      const handleUpdateBlog = ()=>{
+
+        axios.get(`${urlEndPoint}/users/all`)
+        .then(function (response) {
+          // console.log(response);
+          setUsers(response.data.users);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  
+      },[id, urlEndPoint])
+
+      useEffect(()=>{
+        axios.get(`${urlEndPoint}/users/one/${ticket.assignedToUserId}`)
+        .then(function (response) {
+            console.log(response.data.user.email)
+          setAssignedUser(response.data.user.email);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        axios.get(`${urlEndPoint}/users/one/${ticket.createdById}`)
+        .then(function (response) {
+          setCreatedUser(response.data.user.email);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        setCreatedAt(new Date(ticket.createdAt))
+      }, [ticket, urlEndPoint])
+
+      const handleUpdateTicket = ()=>{
         const req = {
-            title: blogTitle,
-            text: text,
-            author: author,
-            categories: categories
+            title: ticketTitle,
+            description: description,
+            assignedToUserId: assignedToUserId,
+            status: status,
+            lastModified: Date.now()
+            // categories: categories
           } 
-          axios.put(`${urlEndPoint}/blogs/update-one/${blog.title}`, req)
+          axios.put(`${urlEndPoint}/tickets/update-one/${ticket._id}`, req)
           .then(function (response) {
             console.log(response);
           },{
@@ -46,8 +85,8 @@ const BlogPage = (props)=>{
           })
       }
 
-      const handleDeleteBlog = ()=>{
-        axios.delete(`${urlEndPoint}/blogs/single/${blog.title}`)
+      const handleDeleteTicket = ()=>{
+        axios.delete(`${urlEndPoint}/tickets/single/${ticket._id}`)
         .then(function(response){
             console.log("deleted")
         })
@@ -57,7 +96,27 @@ const BlogPage = (props)=>{
         <div>
             <div className="card m-5">
                 <div className="card-body">
-                    {!isEditing && <h5 className="card-title">{blog.title}</h5>}
+                    <div className='row'>
+                        <div className='col'>
+                            <p className='text-start'>Created By: {createdUser}</p>
+                        </div>
+                        <div className='col'>
+                            {!isEditing && <p className='text-end'>Status: {ticket.status}</p>}
+                            {isEditing && 
+                            <select 
+                            className='form-select mx-2'
+                            defaultValue={ticket.status}
+                            onChange={(e)=>{
+                                setStatus(e.target.value)
+                            }}
+                            >
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Done">Done</option>
+                            </select>}
+                        </div>
+                    </div>
+                    {!isEditing && <h5 className="card-title">{ticket.title}</h5>}
                     {isEditing && (
                         <div className='text-start m-2'>
                             <label htmlFor='title'>Title:</label>
@@ -65,76 +124,74 @@ const BlogPage = (props)=>{
                             id='title'
                             className='form-control'
                             type="text"
-                            defaultValue={blog.title}
+                            defaultValue={ticket.title}
                             onChange={(e) => {
-                                setBlogTitle(e.target.value);
+                                setTicketTitle(e.target.value);
                             }}
                             />
                         </div>
                     )}
-                    {!isEditing && <h6 className="card-subtitle mb-2 text-muted">By: {blog.author}</h6>}
+                    {!isEditing && <p className="card-text">{ticket.description}</p>}
                     {isEditing && (
                         <div className='text-start m-2'>
-                            <label htmlFor='author'>Author:</label>
-                            <input
-                            id='author'
-                            className='form-control'
-                            type="text"
-                            defaultValue={blog.author}
-                            onChange={(e) => {
-                                setAuthor(e.target.value);
-                            }}
-                            />
-                        </div>
-                    )}
-                    {!isEditing && <p className="card-text">{blog.text}</p>}
-                    {isEditing && (
-                        <div className='text-start m-2'>
-                            <label htmlFor='text'>Text:</label>
+                            <label htmlFor='description'>description:</label>
                             <textarea
-                            rows="15"
-                            id='text'
+                            id='description'
                             className='form-control'
-                            defaultValue={blog.text}
+                            defaultValue={ticket.description}
                             onChange={(e) => {
-                                setText(e.target.value);
+                                setDescription(e.target.value);
                             }}
                             />
                         </div>
                     )}
-                    {!isEditing && <p>Categories: {blog.categories && blog.categories.join(", ")}</p>}
+                    {!isEditing && <p className="card-text">Assigned To: {assignedUser}</p>}
                     {isEditing && (
                         <div className='text-start m-2'>
-                            <label htmlFor='categories'>Categories:</label>
-                            <input
-                            id='categories'
-                            className='form-control'
-                            type="text"
-                            defaultValue={blog.categories}
-                            onChange={(e) => {
-                                const array = e.target.value.split(',')
-                                setCategories(array);
-                            }}
-                            />
-                            <small id="categorieHelp" className="form-text text-muted">Enter each category seperated by commas no spaces.</small>
+                            <label htmlFor='assign'>Assign To:</label>
+                            <select
+                                required
+                                id='assign'
+                                className='form-select'
+                                onChange={(e)=>{
+                                    setAssignedToUserId(e.target.value)
+                                }}  
+                            >
+                                <option value={ticket.assignedToUserId}>{assignedUser}</option>
+                                {users.map((item, index) => {
+                                    return (<option
+                                            key={index}
+                                            value={item._id}
+                                            >{item.email}</option>
+                                        )
+                                })}
+                            </select>
                         </div>
                     )}
-                    <small><p>Created At: {blog.createdAt}</p></small>
+                    
+                <div className='row'>
+                        <div className='col'>
+                            <p className='text-start'>Created on: {createdAt}</p>
+                        </div>
+                        <div className='col'>
+                           <p className='text-end'></p>
+                        </div>
+                    </div>
                 </div>
             </div>
                 {auth.userEmail && !isEditing && <button type="button" className="btn btn-primary mx-2"
                     onClick={() => {
                     setIsEditing(true);
                     }}
-                >Edit Blog</button>
+                >Edit Ticket</button>
                 }
                 {isEditing && <div><button type="button" className="btn btn-primary mx-2"
                     onClick={() => {
                     setIsEditing(false);
-                    handleUpdateBlog()
+                    handleUpdateTicket()
                     window.location.reload()
                     }}
-                >Update Blog</button>
+                >Update Ticket</button>
                 <button type="button" className="btn btn-danger mx-2"
                     onClick={()=>{
                         setIsEditing(false)
@@ -145,16 +202,16 @@ const BlogPage = (props)=>{
                 {auth.userEmail && !isEditing && <Link to="/" type="button" className="btn btn-danger mx-2"
                     onClick={(e) => {
                         if (window.confirm("Are you sure you want to delete?")){
-                            handleDeleteBlog();
+                            handleDeleteTicket();
                         }else{
                             e.preventDefault()
                         }
                     }}
                 >
-                    Delete Blog
+                    Delete Ticket
                 </Link>}
         </div>
     )
 }
 
-export default BlogPage
+export default TicketPage

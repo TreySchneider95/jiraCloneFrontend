@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import axios from 'axios';
 import HomePage from './Pages/HomePage';
-import BlogPage from './Pages/TicketPage';
+import TicketPage from './Pages/TicketPage';
 import NewTicketPage from './Pages/NewTicketPage';
 import NewUserPage from './Pages/NewUserPage';
 import LoginPage from './Pages/LoginPage';
@@ -44,8 +44,8 @@ function App() {
 
         },
         { 
-          path: "blog/:id",
-          element: <BlogPage 
+          path: "ticket/:id",
+          element: <TicketPage 
               urlEndPoint={urlEndPoint} 
               />
         },
