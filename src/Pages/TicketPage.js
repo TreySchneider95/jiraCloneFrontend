@@ -65,7 +65,6 @@ const TicketPage = (props)=>{
           console.log(error);
         });
 
-        setCreatedAt(new Date(ticket.createdAt))
       }, [ticket, urlEndPoint])
 
       const handleUpdateTicket = ()=>{
@@ -171,13 +170,14 @@ const TicketPage = (props)=>{
                     
                 <div className='row'>
                         <div className='col'>
-                            <p className='text-start'>Created on: {createdAt}</p>
+                            <p className='text-start'>Created at: {ticket.createdAt.split('T')[0]}</p>
                         </div>
                         <div className='col'>
-                           <p className='text-end'></p>
+                           <p className='text-end'>Last updated at {ticket.lastModified.split('T')[0]}</p>
                         </div>
                     </div>
                 </div>
+                
             </div>
                 {auth.userEmail && !isEditing && <button type="button" className="btn btn-primary mx-2"
                     onClick={() => {
